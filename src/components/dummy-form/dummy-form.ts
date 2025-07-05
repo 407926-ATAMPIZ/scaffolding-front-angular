@@ -43,7 +43,10 @@ export class DummyForm implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid) return;
+    if (this.formGroup.invalid) {
+      // this.formGroup.markAllAsTouched();
+      return;
+    }
 
     const dummy: DummyCreateDto = this.formGroup.value;
     const id = this.route.snapshot.params['id'];
