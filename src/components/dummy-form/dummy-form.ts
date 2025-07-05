@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DummyService} from '../../services/dummy-service';
-import {formatDate} from '@angular/common';
+import {Calidad} from '../../models/calidad';
 
 @Component({
   selector: 'app-dummy-form',
@@ -19,15 +19,17 @@ export class DummyForm implements OnInit {
   private router = inject(Router)
   editMode = false;
   formGroup!: FormGroup;
+  calidadOptions = Object.values(Calidad)
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
-    if (id){
+    if (id) {
       this.editMode = true
       this.loadDummy(+id) //pasar de string a number
     }
     this.formGroup = this.formBuilder.group({
       dummy_field: ['', Validators.required],
+      calidad: ['', Validators.required],
     })
   }
 
@@ -35,6 +37,7 @@ export class DummyForm implements OnInit {
     this.dummyService.getById(id).subscribe(dummy => {
       this.formGroup.patchValue({
         dummy_field: dummy.dummy_field,
+        calidad: dummy.calidad,
       });
     });
   }
@@ -42,7 +45,7 @@ export class DummyForm implements OnInit {
   onSubmit() {
     if (this.formGroup.invalid) return;
 
-    const dummy:DummyCreateDto = this.formGroup.value;
+    const dummy: DummyCreateDto = this.formGroup.value;
     const id = this.route.snapshot.params['id'];
 
     const action$ = this.editMode
@@ -54,7 +57,4 @@ export class DummyForm implements OnInit {
     });
 
   }
-
-  protected readonly Date = Date;
-  protected readonly formatDate = formatDate;
 }

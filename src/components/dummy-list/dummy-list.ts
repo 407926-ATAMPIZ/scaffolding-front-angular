@@ -3,7 +3,8 @@ import {DummyService} from '../../services/dummy-service';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms'; //para usar formularios reactivos
 import {Observable, startWith, Subject, switchMap} from 'rxjs'; //operadores rxjs para manejar flujos de datos reactivos.
 import {AsyncPipe} from '@angular/common'; //para trabajar con observables en el HTML
-import {Router} from '@angular/router'; //para redirecciones y navegaciòn
+import {Router} from '@angular/router';
+import {Calidad} from '../../models/calidad'; //para redirecciones y navegaciòn
 
 @Component({ //define un componente standalone, su selector, imports, template y estilos
   selector: 'app-dummy-list',
@@ -19,11 +20,13 @@ export class DummyList {
   private dummyService = inject(DummyService); // DummyService para interactuar con la API
   private formBuilder = inject(FormBuilder); // FormBuilder para crear el formulario
   private router = inject(Router); //Router para redireccionar
+  calidadOptions = Object.values(Calidad)
 
   // Formulario reactivo, define el FormGroup con dos campos opcionales
   filterForm: FormGroup = this.formBuilder.group({
     dummyField: [''],
-    fromDate: ['']
+    fromDate: [''],
+    calidad: [''],
   })
   // Subject para disparar la bùsqueda y carga de los dummies, un subject es un "disparador" manual. Emite valores con el Subject.next()
   // Subject es un observable y observer al mismo tiempo, es un disparador manual muy útil.
@@ -32,11 +35,9 @@ export class DummyList {
   dummies$: Observable<Dummy[]> = this.filterTrigger$.pipe( //cuando el subject hace .next() (emite un evento), se ejecuta el switchMap
     startWith(null), //Para cargar autimaticamente al iniciar el componente
     switchMap(() => { //elige si usar los filtros o traer todos los dummies, switchMap sirve para, en caso de que el observable emita una nueva señal, se cancela el accionar anterior y se sigue con el de la nueva señal.
-      const {dummyField, fromDate} = this.filterForm.value;
+      const {dummyField, fromDate, calidad} = this.filterForm.value; //setea a cada una de esas variables los valores que coinciden con sus nombres en el formGroup
       const hasFilters = dummyField || fromDate;
-      return hasFilters
-        ? this.dummyService.searchDummies(dummyField || undefined, fromDate || undefined)
-        : this.dummyService.getAll()
+      return this.dummyService.searchDummies(dummyField || undefined, fromDate || undefined, calidad || undefined);
     })
   )
 

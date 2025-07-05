@@ -31,10 +31,11 @@ export class DummyService {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`)
   }
 
-  searchDummies(dummyField?: string, fromDate?: string): Observable<Dummy[]> {
+  searchDummies(dummyField?: string, fromDate?: string, calidad?:string): Observable<Dummy[]> {
     let params = new HttpParams();
     if (dummyField) params = params.set('dummyField', dummyField)
     if (fromDate) params = params.set('fromDate', fromDate)
+    if (calidad) params = params.set('calidad', calidad)
     return this.httpClient.get<Dummy[]>(`${this.apiUrl}/search`, {params});
   }
 

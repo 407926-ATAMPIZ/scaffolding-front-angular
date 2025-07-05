@@ -6,6 +6,20 @@
       <input formControlName="dummyField" type="text" class="p-2 border rounded-md"/>
     </div>
     <div class="flex flex-col">
+      <label>Calidad</label>
+      <select formControlName="calidad" class="p-2 border rounded-md">
+        <option value="">Seleccione una calidad</option>
+        @for (calidad of calidadOptions; track calidad) {
+          <option [value]="calidad">{{ calidad }}</option>
+        }
+      </select>
+      @if (filterForm.get('calidad')?.touched && filterForm.get('calidad')?.invalid) {
+        <div class="text-red-500 text-sm">
+          La calidad es obligatoria.
+        </div>
+      }
+    </div>
+    <div class="flex flex-col">
       <label class="text-sm">Fecha desde</label>
       <input formControlName="fromDate" type="date" class="p-2 border rounded-md"/>
     </div>
@@ -19,6 +33,7 @@
         <th class="p-2">ID</th>
         <th class="p-2">Dummy Field</th>
         <th class="p-2">Dummy Fecha</th>
+        <th class="p-2">Calidad</th>
         <th class="p-2">Acciones</th>
       </tr>
       </thead>
@@ -28,6 +43,7 @@
             <td class="p-2">{{ dummy.id }}</td>
             <td class="p-2">{{ dummy.dummy_field }}</td>
             <td class="p-2">{{ dummy.fecha }}</td>
+            <td class="p-2">{{ dummy.calidad }}</td>
             <td>
               <div class="px-4 flex gap-4 items-center justify-center">
                 <button class="rounded-2xl bg-red-400 text-white px-3 py-1 hover:bg-red-500 transition"

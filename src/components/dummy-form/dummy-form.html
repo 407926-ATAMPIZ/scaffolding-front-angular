@@ -5,13 +5,33 @@
 
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="space-y-4">
     <div>
-      <label>Campo</label>
-      <input formControlName="dummy_field" class="w-full p-2 border rounded-md" />
+      <label>Dummy Field</label>
+      <input formControlName="dummy_field" class="w-full p-2 border rounded-md"/>
+      @if (formGroup.get('dummy_field')?.touched && formGroup.get('dummy_field')?.invalid) {
+        <div class="text-red-500 text-sm">
+          Este campo es obligatorio.
+        </div>
+      }
     </div>
 
     <div>
       <label>Fecha</label>
       <p class="w-full p-2 border rounded-md">2025-07-04</p>
+    </div>
+
+    <div>
+      <label>Calidad</label>
+      <select formControlName="calidad" class="w-full p-2 border rounded-md">
+        <option value="">Seleccione una calidad</option>
+        @for (calidad of calidadOptions; track calidad) {
+          <option [value]="calidad">{{ calidad }}</option>
+        }
+      </select>
+      @if (formGroup.get('calidad')?.touched && formGroup.get('calidad')?.invalid) {
+        <div class="text-red-500 text-sm">
+          La calidad es obligatoria.
+        </div>
+      }
     </div>
 
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
