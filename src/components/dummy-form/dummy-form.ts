@@ -28,7 +28,7 @@ export class DummyForm implements OnInit {
       this.loadDummy(+id) //pasar de string a number
     }
     this.formGroup = this.formBuilder.group({
-      dummy_field: ['', Validators.required],
+      dummy_field: ['', [Validators.required, Validators.minLength(3)]],
       calidad: ['', Validators.required],
     })
   }
